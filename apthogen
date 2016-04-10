@@ -1,0 +1,194 @@
+#!/bin/bash
+: << 'module.sh'
+    Version: 2016.1
+    Authors: sysadmin@vhalholl.info
+    Description: manage VIMproved  modules under pathogen <https://github.com/tpope/vim-pathogen>
+    Dependencies: vim bash git awk
+module.sh
+#TODO:
+# apthogen add,get,install,enable,disable,remove,update,upgrade,show,list
+# VIM Bindings
+
+if [[ $# > 2 || $# = 2 ]];then
+    ARGS=$(echo $* |awk '{print substr($0, index($0,$2))}')
+else
+    ARGS=''
+fi
+
+CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BUNDLE="$CDIR/bundle"
+LOGS="$CDIR/.module-log-$(date +%Y%m%d)"
+AVAILABLE="$CDIR/bundle-availlable"
+
+MODULELIST="$CDIR/.modulelist"
+
+_usage(){
+    echo -e "Usage : $0 {install|remove|enable|disable|update|upgrade|list|search}"
+}
+
+_enable_module(){
+    [[ ! -z $1 ]]&&{
+        [[ ! -d $AVAILABLE/$1 ]]&& { echo "Module $1 is unavailable"; }||{
+            [[ ! -L $BUNDLE/$1 ]]&&{
+                cd $BUNDLE
+                ln -s $AVAILABLE/$1
+                cd ..
+            }||{ 
+                echo "Module $1 already exist"
+            }
+        }
+    }||{
+        echo -e "Usage : $0 enable [modulename]";
+    }
+}
+
+_disable_module(){
+    [[ ! -z $1 ]]&&{
+        [[ -L $BUNDLE/$1 ]]&&{
+            rm $BUNDLE/$1 && echo "Module $1 disabled"
+        }||{ 
+            echo "Module $1 not found !"
+        }
+    }||{
+        echo -e "Usage : $0 disable [modulename]";
+    }
+}
+
+_remove_module(){
+    [[ ! -z $1 ]]&&{
+        [[ -d $AVAILABLE/$1 ]]&&{
+            _disable_module $1 
+            rm -r $AVAILABLE/$1 && echo "Module $1 deleted"
+        }||{ 
+            echo "Module $1 not found !"
+        }
+    }||{
+        echo -e "Usage : $0 remove [modulename]";
+    }
+}
+_update_module(){
+    [[ ! -z $1 ]]&&{ 
+        [[ -d $AVAILABLE/$1/.git ]]&&{ 
+            url=$(cat ${AVAILABLE}/${1}/.git/config |grep 'url' |awk '{print $3}');
+            echo "Indexing module $1 @ $url";
+            echo "$i@$j" >> $MODULELIST;
+        }
+    }||{
+        cd $AVAILABLE
+        #if not exist modulelist or empty and module dir is not empty then create modulelist
+        [[ ! -s $MODULELIST && $(ls -l |grep ^d |wc -l) != 0 ]]&& { #create modulelist
+            echo "There is no $MODULELIST file suitable, indexing from $AVAILABLE directory"
+            for i in $(ls -l |grep ^d |awk '{print $9}');do 
+                j=$(cat ${i}/.git/config |grep 'url' |awk '{print $3}');
+                echo "Indexing module $i @ $j";
+                echo "$i@$j" >> $MODULELIST;
+            done
+        }||{ #else compare and add to modulelist
+            MODULES=$(cat $MODULELIST | wc -l); 
+            INSTALLEDMODULES=$(ls -l |grep ^d |wc -l);
+            #echo "There is $MODULES modules found in list !"
+            #echo "There is $INSTALLEDMODULES modules found in $AVAILABLE directory !"
+            [[ $MODULES != $INSTALLEDMODULES ]]&& {
+                for i in $(ls -l |grep ^d |awk '{print $9}');do 
+                    j=$(cat ${i}/.git/config |grep 'url' |awk '{print $3}');
+                    [[ $(grep "$i@$j" $MODULELIST) ]]|| {
+                        echo "Indexing new module $i @$j"; echo "$i@$j" >> $MODULELIST;
+                        temp=$(cat $MODULELIST |sort); rm $MODULELIST;
+                        for i in $(echo $temp | tr ' ' '\n');do 
+                            echo $i >> $MODULELIST;
+                        done
+                    }
+                done
+            }
+        }
+        cd $CDIR
+    }
+}
+
+_install_module(){
+    [[ ! -z $1 ]]&& {
+        echo -e "Install module from $1"
+        cd $AVAILABLE
+        git clone $1 &>>$LOGS && _update_module $1
+        cd ..
+    } || echo -e "Usage : $0 install [https|git://url_of_git_repository]"
+}
+
+_upgrade_module(){
+    cd $AVAILABLE
+    [[ -z $1 ]]&&{
+        echo "Upgrading all modules"
+        for dir in $(ls -d */);do 
+            [[ -d $dir/.git ]]&&{ cd $dir;git pull &>>$LOGS;cd ..; };
+        done 
+    }||{
+        [[ -d $1/.git ]]&&{
+            echo "Upgrading $1"
+            cd $1;git pull &>>$LOGS;cd ..; 
+        }||{ 
+            echo "There is no module $1"; 
+        }
+    }
+    cd $CDIR
+}
+
+_list_module(){
+    [[ -s $MODULELIST ]]&&{ 
+        cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" \t \t "$2  }'; 
+    }||{ echo "File $MODULELIST not found ! You may run $0 update before"; }
+}
+
+_search_module(){
+    [[ ! -z $1 ]]&&{
+        [[ -s $MODULELIST ]]&& { 
+            for i in $(cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1  }' |grep "$1");do
+                grep "$i" $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" \t \t "$2  }'
+            done
+        }
+    }||{ 
+        echo -e "Usage : $0 search [searchpatern]";
+    } 
+}
+
+_import_module(){
+    [[ ! -z $1 ]]&&{
+        for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done
+        for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done
+    }||{
+        for i in $(_list_module |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done
+        for i in $(_list_module |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done
+    }
+}
+
+case $1 in
+    install)
+        _install_module $ARGS
+    ;;
+    remove)
+        _remove_module $ARGS
+    ;;
+    enable)
+        _enable_module $ARGS
+    ;;
+    disable)
+        _disable_module $ARGS
+    ;;
+    update)
+        _update_module $ARGS
+    ;;
+    upgrade)
+        _upgrade_module $ARGS
+    ;;
+    list)
+        _list_module $ARGS
+    ;;
+    search)
+        _search_module $ARGS
+    ;;
+    import)
+        _import_module $ARGS
+    ;;
+    *) 
+        _usage
+    ;;
+esac
