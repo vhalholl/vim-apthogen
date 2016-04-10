@@ -37,4 +37,5 @@ YouCompleteMe@https://github.com/Valloric/YouCompleteMe
 neocomplcache@https://github.com/Shougo/neocomplcache.vim
 Smart-Tabs@https://github.com/vim-scripts/Smart-Tabs
 vim-javascript@https://github.com/pangloss/vim-javascript
-
+vim-apthogen@https://github.com/vhalholl/vim-apthogen
+vimshell-ssh@ihttps://github.com/ujihisa/vimshell-ssh
