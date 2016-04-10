@@ -2,10 +2,10 @@ vim-pathogne@https://github.com/tpope/vim-pathogen
 vim-sensible@https://github.com/tpope/vim-sensible
 vim-project@https://github.com/shemerey/vim-project
 vim-togglemouse@https://github.com/nvie/vim-togglemouse
-vimproc@https://github.com/Shougo/vimproc.vim
-vimshell@https://github.com/Shougo/vimshell.vim
+vimproc.vim@https://github.com/Shougo/vimproc.vim
+vimshell.vim@https://github.com/Shougo/vimshell.vim
 delimitMate@https://github.com/Raimondi/delimitMate
-vim-rooter@https://github.com/airblade/vim-rooter
+vœim-rooter@https://github.com/airblade/vim-rooter
 vim-eunuch@https://github.com/tpope/vim-eunuch
 vim-fugitive@https://github.com/tpope/vim-fugitive
 vim-airline@https://github.com/bling/vim-airline

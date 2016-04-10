@@ -33,7 +33,7 @@ DEP=$(which git);[ ! -z $DEP ]&& {
     n=$(cat $CDIR/.modulelist |wc -l)
     _import_required(){
         echo "Propagate::Required";
-        for i in {vim-pathogen,vim-sensible,vim-project,vim-togglemouse,vimproc,vimshell,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
+        for i in {vim-pathogen,vim-sensible,vim-project,vim-togglemouse,vimproc.vim,vimshell.vim,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
     }
     _import_highly(){
         _import_required
