@@ -107,7 +107,7 @@ _update_module(){
 
 _install_module(){
     [[ ! -z $1 ]]&& {
-        echo -e "Install module from $1"
+        echo -e "Phagocyte::$1"
         cd $AVAILABLE
         git clone $1 &>>$LOGS && _update_module $1
         cd ..
@@ -117,16 +117,16 @@ _install_module(){
 _upgrade_module(){
     cd $AVAILABLE
     [[ -z $1 ]]&&{
-        echo "Upgrading all modules"
+        echo "Evolve::All"
         for dir in $(ls -d */);do 
             [[ -d $dir/.git ]]&&{ cd $dir;git pull &>>$LOGS;cd ..; };
         done 
     }||{
         [[ -d $1/.git ]]&&{
-            echo "Upgrading $1"
+            echo "Evolve::$1"
             cd $1;git pull &>>$LOGS;cd ..; 
         }||{ 
-            echo "There is no module $1"; 
+            echo "There is no place like $1"; 
         }
     }
     cd $CDIR
