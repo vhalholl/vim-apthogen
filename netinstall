@@ -41,7 +41,7 @@ DEP=$(which git);[ ! -z $DEP ]&& {
     _import(){
         echo "Propagate::$1"
         while read -r line;do
-            ./apthogent import $line
+            ./apthogen import $line
         done < .$1.list
     }
 
