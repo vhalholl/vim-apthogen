@@ -6,14 +6,11 @@
     Dependencies: vim bash git awk
 module.sh
 #TODO:
-# apthogen::add :add repo to module list w/out installing them
-# apthogen::import :import from file
+# apthogen::add     :add repo to module list w/out installing them
+# apthogen::import  :import from file
 # apthogen::install :merge apthogen::import to apthogen::install
-# apthogen::update :only updgrade apthogen
-# aphtogen::show 
-# 
-# VIM Bindings
-# 
+# apthogen::update  :only updgrade apthogen
+# aphtogen::show    :show module  informations
 
 if [[ $# > 2 || $# = 2 ]];then
     ARGS=$(echo $* |awk '{print substr($0, index($0,$2))}')
