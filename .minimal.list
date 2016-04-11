@@ -3,5 +3,5 @@ vim-project
 vim-togglemouse
 vimproc.vim
 vimshell.vim
-vim-delimitMate
+delimitMate
 vim-rooter
