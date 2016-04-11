@@ -10,7 +10,7 @@ mv ~/.vimrc $_-$(date +%Y%m%d)
 ```
 Create new directory and execute netinstall script via curl :
 ```sh
-mkdir ~/.vimnew && cd  $_ &&curl -sL https://git.io/vVQ2x |bash
+mkdir ~/.vimnew && cd  $_ && curl -sL https://git.io/vVQ2x |bash
 ```
 This will output something like this :
 ```
