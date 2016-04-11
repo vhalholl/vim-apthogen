@@ -1,6 +1,9 @@
 #vim-apthogen
 Easily manage your vim's plugins
+<<<<<<< HEAD
 
+=======
+>>>>>>> devel
 * Like `apt` for `dpkg`, `vim-apthogen` is a frontend to `vim-pathogen` 
 
 ![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/apthogen-1024x560.png)
@@ -53,25 +56,31 @@ You can manage plugins easily w/ module script :
 ./apthogen 
 Usage : ./aptogen {install|remove|enable|disable|update|upgrade|list|search|show}
 ```
+### Add
+Add New plugins into bundle-availlable and list of availlable plugins
+```sh
+./aptogen add <url_of_git_repository>
+./aptogen enable <module_name>
+```
 ### Install
 Install plugin in bundle-availlable
 ```sh
-./aptogen install url_of_git_repository
+./aptogen install <module_name>
 ```
 ### Remove
 Disable plugin and remove it from bundle-availlable
 ```sh
-./aptogen remove module_name
+./aptogen remove <module_name>
 ```
 ### Enable
 Link module from bundle-avallable to bundle to activate it
 ```sh
-./aptogen enable module_name
+./aptogen enable <module_name>
 ```
 ### Disable
 Unlink module from bundle
 ```sh
-./aptogen disable module_name
+./aptogen disable <module_name>
 ```
 ### Update
 Update module list w/ module or all availlable modules
@@ -91,7 +100,7 @@ List all indexed modules
 ### Search
 Search a pattern in module list
 ```sh
-./apthogen search pattern
+./apthogen search <pattern>
 ```
 ### Show 
 Show informations about modules, act like 'apthogen help' if no argument
