@@ -2,7 +2,7 @@
 Manage easily your vim's plugins
 Like APT for DPKG vim-aphtogen is a frontend to vim-pathogen 
 
-![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/vim-config-1024x558.png)
+![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/apthogen-1024x560.png)
 ## Installation :
 Backup your initial vim configuration :
 ```sh
