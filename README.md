@@ -12,7 +12,7 @@ Create new directory and execute install.sh script via curl :
 ```sh
 mkdir ~/.vimnew
 cd  ~/.vimnew
-curl -sL https://git.io/vVyH1 |bash
+curl -sL https://git.io/vVQ2x |bash
 ```
 This will output something like this :
 ```
