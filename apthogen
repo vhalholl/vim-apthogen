@@ -106,7 +106,7 @@ _update_module_list(){
 
 _install_module(){
     [[ ! -z $1 ]]&& {
-        echo -e "Phagocyte::$1"
+    echo -e "Apthogen::Phagocyte::$1"
         cd $AVAILABLE
         git clone $1 &>>$LOGS && _update_module_list $1
         cd ..
@@ -116,13 +116,12 @@ _install_module(){
 _upgrade_module(){
     cd $AVAILABLE
     [[ -z $1 ]]&&{
-        echo "Evolve::All"
         for dir in $(ls -d */);do 
-            [[ -d $dir/.git ]]&&{ cd $dir;git pull &>>$LOGS;cd ..; };
+            [[ -d $dir/.git ]]&&{ echo "Apthogen::Evolve::$dir"; cd $dir;git pull &>>$LOGS;cd ..; };
         done 
     }||{
         [[ -d $1/.git ]]&&{
-            echo "Evolve::$1"
+            echo "Apthogen::Evolve::$1"
             cd $1;git pull &>>$LOGS;cd ..; 
         }||{ 
             echo "There is no place like $1"; 
