@@ -27,16 +27,28 @@ DEP=$(which git);[ ! -z $DEP ]&& {
         ln -s $CDIR/bundle-availlable/vim-apthogen/netinstall ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/templates ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/apthogen ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.vimrc ./ 
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.vimrc ./
+        
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.required.list ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.minimal.list ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.highly.list ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.recomended.list ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.whynot.list ./
     }
 
     n=$(cat $CDIR/.modulelist |wc -l)
     _import_required(){
         echo "Propagate::Required";
-        for i in {vim-pathogen,vim-sensible,vim-project,vim-togglemouse,vimproc.vim,vimshell.vim,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
+        #for i in {vim-pathogen};do 
+        ./apthogen import vim-pathogen #; done
+    }
+    _import_minimal(){
+        import_required
+        echo "Propagate::Minimal";
+        for i in {vim-sensible,vim-project,vim-togglemouse,vimproc.vim,vimshell.vim,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
     }
     _import_highly(){
-        _import_required
+        _import_minimal
         echo "Propagate::Highly"
         for i in {vim-eunuch,vim-fugitive,vim-airline,vim-signify,nerdtree,syntastic,git-vim,puppet-eyes,tagbar,taglist.vim,taskList.vim};do ./apthogen import $i; done
     }
@@ -52,19 +64,21 @@ DEP=$(which git);[ ! -z $DEP ]&& {
     }
 
     read -p "Propagate :
-[M]inimal (Default)
-[H]ighly Recomended
-[R]ecomended
-[W]hynot
-[A]ll (May take a while)
+[S]lim               (Only Required Modules)     
+[M]inimal            (Default)
+[H]ighly Recomended  
+[R]ecomended          
+[W]hynot             
+[A]ll                (Not Recomended For Testing Purpose)
 [C]ancel
 Enter your choice and press [Enter]:   " c
     case "$c" in 
         a|A)    echo "Propagate::All ($n)"; ./apthogen import ;;
         c|C)    exit 0 ;;
+        s|S)    _import_required ;;
         h|H)    _import_highly ;;
         r|R)    _import_recomended ;;
         w|W)    _import_whynot ;;
-        *)      _import_required ;;
+        *)      _import_minimal ;;
     esac
 }||{ echo "Command git not found ! Try : sudo apt install git";exit 0; }
