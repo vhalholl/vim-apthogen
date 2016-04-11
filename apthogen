@@ -6,11 +6,7 @@
     Dependencies: vim bash git awk
 module.sh
 #TODO:
-# apthogen::add     :add repo to module list w/out installing them
 # apthogen::import  :import from file
-# apthogen::install :merge apthogen::import to apthogen::install
-# apthogen::update  :only updgrade apthogen
-# aphtogen::show    :show  informations
 
 if [[ $# > 2 || $# = 2 ]];then
     ARGS=$(echo $* |awk '{print substr($0, index($0,$2))}')
@@ -33,14 +29,15 @@ _enable_module(){
         [[ ! -d $AVAILABLE/$1 ]]&& { echo "Module $1 is unavailable"; }||{
             [[ ! -L $BUNDLE/$1 ]]&&{
                 cd $BUNDLE
-                ln -s $AVAILABLE/$1
+                ln -s $AVAILABLE/$1 
                 cd ..
+                echo "Module $1 enabled"
             }||{ 
                 echo "Module $1 already exist"
             }
         }
     }||{
-        echo -e "Usage : $0 enable [modulename]";
+        echo -e "Usage : $0 enable [module_name]";
     }
 }
 
@@ -52,7 +49,7 @@ _disable_module(){
             echo "Module $1 not found !"
         }
     }||{
-        echo -e "Usage : $0 disable [modulename]";
+        echo -e "Usage : $0 disable [module_name]";
     }
 }
 
@@ -60,7 +57,7 @@ _remove_module(){
     [[ ! -z $1 ]]&&{
         [[ -d $AVAILABLE/$1 ]]&&{
             _disable_module $1 
-            rm -r $AVAILABLE/$1 && echo "Module $1 deleted"
+            rm -r $AVAILABLE/$1 && echo "Module $1 removed"
         }||{ 
             echo "Module $1 not found !"
         }
