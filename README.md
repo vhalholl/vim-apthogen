@@ -1,5 +1,6 @@
 #vim-apthogen
-Just a bunch of config files and plugins for VIM
+Manage easily your vim's plugins
+Like APT for DPKG vim-aphtogen is a frontend to vim-pathogen 
 
 ![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/vim-config-1024x558.png)
 ## Installation :
@@ -117,7 +118,7 @@ Install and enable modules from modules list (used for installation purpose)
 * https://github.com/Shougo/vimproc.vim
 * https://github.com/Shougo/vimshell.vim
 * https://github.com/Raimondi/delimitMate
-* https://github.com/Raimondi/delimitMate
+* https://github.com/airblade/vim-rooter
 
 ### Highly Recomended :
 Ensure Minimal Modules are installed
