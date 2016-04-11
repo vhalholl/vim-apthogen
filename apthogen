@@ -143,11 +143,27 @@ _list_module(){
 _search_module(){
     [[ ! -z $1 ]]&&{
         [[ -s $MODULELIST ]]&& { 
-            _list_module |awk '{print $1}' |grep "$1";
+        for i in $(_list_module |awk '{print $1}' |grep "$1");do
+            _list_module |grep $i;
+        done
         }
     }||{ 
         echo -e "Usage : $0 search [searchpatern]";
     } 
+}
+
+_show_module(){
+     [[ ! -z $1 ]]&&{
+        for i in $(_search_module $1 |awk '{print $2}' |grep "$1");do
+            baseUrl="$(echo $i |sed 's/github/raw.githubusercontent/')/master/README";
+            for i in {md,markdown};do 
+                [[ $(curl -sL $baseUrl.$i) != "Not Found" ]]&& curl -sL $baseUrl.$i |less
+            done
+        done
+    }
+    #||{ 
+        #_show_module vim-apthogen;
+    #} 
 }
 
 _import_module(){
