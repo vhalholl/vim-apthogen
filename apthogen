@@ -23,13 +23,12 @@ fi
 
 CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUNDLE="$CDIR/bundle"
-LOGS="$CDIR/.module-log-$(date +%Y%m%d)"
+LOGS="$CDIR/.apthogne-$(date +%Y%m%d).log"
 AVAILABLE="$CDIR/bundle-availlable"
-
-MODULELIST="$CDIR/.modulelist"
+MODULELIST="$CDIR/.apthogen.list"
 
 _usage(){
-    echo -e "Usage : $0 {install|remove|enable|disable|update|upgrade|list|search}"
+    echo -e "Usage : $0 {install|remove|enable|disable|update|upgrade|list|search|show|help}"
 }
 
 _enable_module(){

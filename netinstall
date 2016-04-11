@@ -7,11 +7,10 @@
 install.sh
 
 CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LOGS="$CDIR/.install-log-$(date +%Y%m%d)"
+LOGS="$CDIR/.netinstall-$(date +%Y%m%d).log"
 
 DEP=$(which git);[ ! -z $DEP ]&& {
 
-    #echo "Creating Directories"
     [[ ! -d $CDIR/bundle ]]&&  mkdir $CDIR/bundle
     [[ ! -d $CDIR/bundle-availlable ]]&&  mkdir $CDIR/bundle-availlable
     [[ ! -d $CDIR/bundle-availlable/vim-apthogen ]]&& {
@@ -23,12 +22,13 @@ DEP=$(which git);[ ! -z $DEP ]&& {
     [[ ! -L $CDIR/bundle/vim-apthogen ]]&&{
         echo "Apthogen::Infection"
         ln -s $CDIR/bundle-availlable/vim-apthogen $CDIR/bundle/
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.modulelist ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/netinstall ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/templates ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/apthogen ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/netinstall ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/.apthogen.list ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/.vimrc ./
         
+        ln -s $CDIR/bundle-availlable/vim-apthogen/templates ./
+
         ln -s $CDIR/bundle-availlable/vim-apthogen/.required.list ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/.minimal.list ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/.highly.list ./
@@ -36,31 +36,13 @@ DEP=$(which git);[ ! -z $DEP ]&& {
         ln -s $CDIR/bundle-availlable/vim-apthogen/.whynot.list ./
     }
 
-    n=$(cat $CDIR/.modulelist |wc -l)
-    _import_required(){
-        echo "Propagate::Required";
-        #for i in {vim-pathogen};do 
-        ./apthogen import vim-pathogen #; done
-    }
-    _import_minimal(){
-        _import_required
-        echo "Propagate::Minimal";
-        for i in {vim-sensible,vim-project,vim-togglemouse,vimproc.vim,vimshell.vim,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
-    }
-    _import_highly(){
-        _import_minimal
-        echo "Propagate::Highly"
-        for i in {vim-eunuch,vim-fugitive,vim-airline,vim-signify,nerdtree,syntastic,git-vim,puppet-eyes,tagbar,taglist.vim,taskList.vim};do ./apthogen import $i; done
-    }
-    _import_recomended(){
-        _import_highly
-        echo "Propagate::Recomended"
-        for i in {vim-gitolite,puppet-syntax-vim,phpcomplete.vim,python-mode,vim-virtualenv,vim-perl,vim-ruby,vim-varnish,vim-html5};do ./apthogen import $i; done
-    }
-    _import_whynot(){
-        _import_recomended
-        echo "Propagate::Whynot"
-        for i in {vim-powerline,vdebug,vim-colorschemes,TeTrIs.vim};do ./apthogen import $i; done
+    n=$(cat $CDIR/.apthogen.list |wc -l)
+
+    _import(){
+        echo "Propagate::$1"
+        while read -r line;do
+            ./apthogent import $line
+        done < .$1.list
     }
 
     read -p "Propagate :
@@ -75,10 +57,10 @@ Enter your choice and press [Enter]:   " c
     case "$c" in 
         a|A)    echo "Propagate::All ($n)"; ./apthogen import ;;
         c|C)    exit 0 ;;
-        s|S)    _import_required ;;
-        h|H)    _import_highly ;;
-        r|R)    _import_recomended ;;
-        w|W)    _import_whynot ;;
-        *)      _import_minimal ;;
+        s|S)    _import required ;;
+        h|H)    _import highly ;;
+        r|R)    _import recomended ;;
+        w|W)    _import whynot ;;
+        *)      _import minimal ;;
     esac
 }||{ echo "Command git not found ! Try : sudo apt install git";exit 0; }

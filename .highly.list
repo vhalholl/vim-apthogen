@@ -1,0 +1,11 @@
+vim-eunuch
+vim-fugitive
+vim-airline
+vim-signify
+nerdtree
+syntastic
+git-vim
+puppet-eyes
+tagbar
+taglist.vim
+taskList.vim
