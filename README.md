@@ -3,16 +3,14 @@ Just a bunch of config files and plugins for VIM
 
 ![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/vim-config-1024x558.png)
 ## Installation :
-Move initial vim configuration :
+Backup your initial vim configuration :
 ```sh
-mv ~/.vim ~/.vim-$(date +%Y%m%d)
-mv ~/.vimrc ~/.vimrc-$(date +%Y%m%d)
+mv ~/.vim $_-$(date +%Y%m%d)
+mv ~/.vimrc $_-$(date +%Y%m%d)
 ```
-Create new directory and execute install.sh script via curl :
+Create new directory and execute netinstall script via curl :
 ```sh
-mkdir ~/.vimnew
-cd  ~/.vimnew
-curl -sL https://git.io/vVQ2x |bash
+mkdir ~/.vimnew && cd  $_ &&curl -sL https://git.io/vVQ2x |bash
 ```
 This will output something like this :
 ```
@@ -20,101 +18,110 @@ Apthogen::Incubate
 Apthogen::Infection
 Propagate::Required
 Install module from https://github.com/tpope/vim-pathogen
-Install module from https://github.com/tpope/vim-sensible
 [...]
 ```
 You can import more modules after installation like this :
 ```
-./install.sh
+./netinstall
 ```
 This will output the module import menu :
 ```
-Import modules ?
-[M]inimal (Default)
-[H]ighly Recomended
-[R]ecomended
-[W]hynot
-[A]ll (May take a while)
+[S]lim               (Only Required Modules)     
+[M]inimal            (Default)
+[H]ighly Recomended  
+[R]ecomended          
+[W]hynot             
+[A]ll                (Not Recomended For Testing Purpose)
 [C]ancel
 Enter your choice and press [Enter]:   R
+```
+Test it :
+```sh
+vim -u ~/.vimnew/.vimrc
+:scriptnames
 ```
 Link new installation :
 ```sh
 ln -s ~/.vimnew ~/.vim
 ln -s ~/.vimnew/.vimrc ~/.vimrc
 ```
-Test it :
-```sh
-vim -u ~/.vimnew/.vimrc
-
-:scriptnames
-```
-Or
-```sh
-vim -u ~/.vimnew/.vimrc +Project
-```
 ## Manage plugins
 You can manage plugins easily w/ module script :
 ```
 ./module 
 Usage :
-./module {install|remove|enable|disable|update|upgrade|list|search}
+./aptogen {install|remove|enable|disable|update|upgrade|list|search}
 ```
 ### Install
 Install plugin in bundle-availlable
 ```sh
-./module install url_of_git_repository
+./aptogen install url_of_git_repository
 ```
 ### Remove
 Disable plugin and remove it from bundle-availlable
 ```sh
-./module remove module_name
+./aptogen remove module_name
 ```
 ### Enable
 Link module from bundle-avallable to bundle to activate it
 ```sh
-./module enable module_name
+./aptogen enable module_name
 ```
 ### Disable
 Unlink module from bundle
 ```sh
-./module disable module_name
+./aptogen disable module_name
 ```
 ### Update
 Update module list w/ module or all availlable modules
 ```sh
-./module update <module_name>
+./apthogen update <module_name>
 ```
 ### Upgrade
 Update module or all availlable modules from github
 ```sh
-./module enable <module name>
+./apthogen enable <module_name>
 ```
 ### List
-List of indexed modules
+List all indexed modules
 ```sh
-./module list
+./apthogen list
 ```
 ### Search
 Search a pattern in module list
 ```sh
-./module search pattern
+./apthogen search pattern
+```
+### Show 
+Show informations about modules, act like 'apthogen help' if no argument
+```sh
+./apthogen show <pattern|module_name|url_git_repository>
+```
+### Help
+This page
+```sh
+./apthogen help
 ```
 ### Import
 Install and enable modules from modules list (used for installation purpose)
 ```sh
 ./module import
 ```
-## List of vim modules used : 
+## List of vim modules used w/ netinstall : 
 ### Required :
 * https://github.com/tpope/vim-pathogen
+
+### Minimal
 * https://github.com/tpope/vim-sensible
 * https://github.com/shemerey/vim-project
 * https://github.com/nvie/vim-togglemouse
 * https://github.com/Shougo/vimproc.vim
 * https://github.com/Shougo/vimshell.vim
+* https://github.com/Raimondi/delimitMate
+* https://github.com/Raimondi/delimitMate
 
 ### Highly Recomended :
+Ensure Minimal Modules are installed
 * https://github.com/tpope/vim-eunuch
 * https://github.com/tpope/vim-fugitive
 * https://github.com/bling/vim-airline
@@ -128,6 +135,7 @@ Install and enable modules from modules list (used for installation purpose)
 * https://github.com/vim-scripts/TaskList.vim
 
 ### Recomended :
+Ensure Highly Recomended Modules are installed
 * https://github.com/tmatilai/gitolite.vim
 * https://github.com/puppetlabs/puppet-syntax-vim
 * https://github.com/shawncplus/phpcomplete.vim
@@ -139,7 +147,6 @@ Install and enable modules from modules list (used for installation purpose)
 * https://github.com/othree/html5.vim
 
 ### Why Not ?
-* https://github.com/Lokaltog/vim-powerline
-* https://github.com/joonty/vdebug
+Ensure Recomended Modules are installed
 * https://github.com/flazz/vim-colorschemes
 * https://github.com/vim-scripts/TeTrIs.vim
