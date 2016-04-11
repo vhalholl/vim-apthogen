@@ -57,7 +57,7 @@ _remove_module(){
     [[ ! -z $1 ]]&&{
         [[ -d $AVAILABLE/$1 ]]&&{
             _disable_module $1 
-            rm -r $AVAILABLE/$1 && echo "Module $1 removed"
+            rm -rf $AVAILABLE/$1 && echo "Module $1 removed"
         }||{ 
             echo "Module $1 not found !"
         }
