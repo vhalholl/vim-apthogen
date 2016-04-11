@@ -48,9 +48,8 @@ ln -s ~/.vimnew/.vimrc ~/.vimrc
 ## Manage plugins
 You can manage plugins easily w/ module script :
 ```
-./module 
-Usage :
-./aptogen {install|remove|enable|disable|update|upgrade|list|search}
+./apthogen 
+Usage : ./aptogen {install|remove|enable|disable|update|upgrade|list|search|show}
 ```
 ### Install
 Install plugin in bundle-availlable
