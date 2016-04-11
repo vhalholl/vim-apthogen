@@ -43,7 +43,7 @@ DEP=$(which git);[ ! -z $DEP ]&& {
         ./apthogen import vim-pathogen #; done
     }
     _import_minimal(){
-        import_required
+        _import_required
         echo "Propagate::Minimal";
         for i in {vim-sensible,vim-project,vim-togglemouse,vimproc.vim,vimshell.vim,vim-delimitMat,vim-rooter};do ./apthogen import $i; done
     }
