@@ -52,10 +52,16 @@ You can manage plugins easily w/ module script :
 ./apthogen 
 Usage : ./aptogen {install|remove|enable|disable|update|upgrade|list|search|show}
 ```
+### Add
+Add New plugins into bundle-availlable and list of availlable plugins
+```sh
+./aptogen add url_of_git_repository
+./aptogen enable module_name
+```
 ### Install
 Install plugin in bundle-availlable
 ```sh
-./aptogen install url_of_git_repository
+./aptogen install module
 ```
 ### Remove
 Disable plugin and remove it from bundle-availlable

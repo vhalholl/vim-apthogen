@@ -68,7 +68,7 @@ _remove_module(){
         echo -e "Usage : $0 remove [modulename]";
     }
 }
-_update_module(){
+_update_module_list(){
     [[ ! -z $1 ]]&&{ 
         [[ -d $AVAILABLE/$1/.git ]]&&{ 
             url=$(cat ${AVAILABLE}/${1}/.git/config |grep 'url' |awk '{print $3}');
@@ -111,9 +111,9 @@ _install_module(){
     [[ ! -z $1 ]]&& {
         echo -e "Phagocyte::$1"
         cd $AVAILABLE
-        git clone $1 &>>$LOGS && _update_module $1
+        git clone $1 &>>$LOGS && _update_module_list $1
         cd ..
-    } || echo -e "Usage : $0 install [https|git://url_of_git_repository]"
+    } || echo -e "Usage : $0 add [https|git://url_of_git_repository]"
 }
 
 _upgrade_module(){
@@ -143,9 +143,7 @@ _list_module(){
 _search_module(){
     [[ ! -z $1 ]]&&{
         [[ -s $MODULELIST ]]&& { 
-            for i in $(cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1  }' |grep "$1");do
-                grep "$i" $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" \t \t "$2  }'
-            done
+            _list_module |awk '{print $1}' |grep "$1";
         }
     }||{ 
         echo -e "Usage : $0 search [searchpatern]";
@@ -154,17 +152,27 @@ _search_module(){
 
 _import_module(){
     [[ ! -z $1 ]]&&{
-        for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done
-        for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done
+        case $1 in
+            *)
+                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done;
+                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done;
+            ;;
+            All|all)
+                for i in $(_list_module |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done
+                for i in $(_list_module |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done
+            ;;
+        esac
     }||{
-        for i in $(_list_module |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done
-        for i in $(_list_module |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done
+        echo -e "Usage $0 install [module_name]";
     }
 }
 
 case $1 in
-    install)
+    add)
         _install_module $ARGS
+    ;;
+    install)
+        _import_module $ARGS
     ;;
     remove)
         _remove_module $ARGS
@@ -176,7 +184,10 @@ case $1 in
         _disable_module $ARGS
     ;;
     update)
-        _update_module $ARGS
+        _upgrade_module vim-apthogen
+    ;;
+    updatelist)
+        _update_module_list
     ;;
     upgrade)
         _upgrade_module $ARGS
@@ -186,6 +197,12 @@ case $1 in
     ;;
     search)
         _search_module $ARGS
+    ;;
+    show)
+        _show_module $ARGS
+    ;;
+    help)
+        _show_module
     ;;
     import)
         _import_module $ARGS
