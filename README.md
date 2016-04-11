@@ -18,8 +18,8 @@ This will output something like this :
 ```
 Apthogen::Incubate
 Apthogen::Infection
-Propagate::Required
-Install module from https://github.com/tpope/vim-pathogen
+Apthogen::Propagate::required
+Apthogen::Phagocyte::https://github.com/tpope/vim-pathogen
 [...]
 ```
 You can import more modules after installation like this :
@@ -54,13 +54,12 @@ You can manage plugins easily w/ module script :
 Usage : ./aptogen {install|remove|enable|disable|update|upgrade|list|search|show}
 ```
 ### Add
-Add New plugins into bundle-availlable and list of availlable plugins
+Add new plugin in list of availlable plugins and download it into bundle-availlable
 ```sh
 ./aptogen add <url_of_git_repository>
-./aptogen enable <module_name>
 ```
 ### Install
-Install plugin in bundle-availlable
+Install plugin from  plugins list into bundle-availlable
 ```sh
 ./aptogen install <module_name>
 ```
@@ -75,7 +74,7 @@ Link module from bundle-avallable to bundle to activate it
 ./aptogen enable <module_name>
 ```
 ### Disable
-Unlink module from bundle
+Unlink module from bundle to deactivate it
 ```sh
 ./aptogen disable <module_name>
 ```
