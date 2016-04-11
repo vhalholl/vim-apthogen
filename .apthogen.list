@@ -41,7 +41,7 @@ vim-project@https://github.com/shemerey/vim-project
 vim-rails@https://github.com/tpope/vim-rails
 vim-ruby@https://github.com/vim-ruby/vim-ruby
 vim-sensible@https://github.com/tpope/vim-sensible
-vimshell-ssh@ihttps://github.com/ujihisa/vimshell-ssh
+vimshell-ssh@https://github.com/ujihisa/vimshell-ssh
 vimshell.vim@https://github.com/Shougo/vimshell.vim
 vim-signature@https://github.com/kshenoy/vim-signature
 vim-signify@https://github.com/mhinz/vim-signify
