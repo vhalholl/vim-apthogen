@@ -1,4 +1,4 @@
-vim-pathogne@https://github.com/tpope/vim-pathogen
+vim-pathogen@https://github.com/tpope/vim-pathogen
 vim-sensible@https://github.com/tpope/vim-sensible
 vim-project@https://github.com/shemerey/vim-project
 vim-togglemouse@https://github.com/nvie/vim-togglemouse
@@ -39,3 +39,16 @@ Smart-Tabs@https://github.com/vim-scripts/Smart-Tabs
 vim-javascript@https://github.com/pangloss/vim-javascript
 vim-apthogen@https://github.com/vhalholl/vim-apthogen
 vimshell-ssh@ihttps://github.com/ujihisa/vimshell-ssh
+FuzzyFinder@https://github.com/vim-scripts/FuzzyFinder
+tern_for_vim@https://github.com/ternjs/tern_for_vim
+jedi@https://github.com/davidhalter/jedi
+omnisharp-vim@https://github.com/OmniSharp/omnisharp-vim
+colorizer@https://github.com/vim-scripts/colorizer
+vim-matchit@https://github.com/edsono/vim-matchit
+nerdcomenter@https://github.com/scrooloose/nerdcommenter
+tabular@https://github.com/godlygeek/tabular
+nextval@https://github.com/vim-scripts/nextval
+vim-signature@https://github.com/kshenoy/vim-signature
+gitv@https://github.com/gregsexton/gitv
+https://github.com/sjl/gundo.vim
+vim-colors-solarized@https://github.com/altercation/vim-colors-solarized
