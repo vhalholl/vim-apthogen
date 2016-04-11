@@ -1,6 +1,7 @@
 #vim-apthogen
 Easily manage your vim's plugins
 * Like `apt` for `dpkg`, `vim-apthogen` is a frontend to `vim-pathogen` 
+
 ![img](https://blog.vhalholl.info/wp-content/uploads/2016/04/apthogen-1024x560.png)
 
 ## Installation :
