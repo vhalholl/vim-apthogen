@@ -10,7 +10,7 @@ module.sh
 # apthogen::import  :import from file
 # apthogen::install :merge apthogen::import to apthogen::install
 # apthogen::update  :only updgrade apthogen
-# aphtogen::show    :show module  informations
+# aphtogen::show    :show  informations
 
 if [[ $# > 2 || $# = 2 ]];then
     ARGS=$(echo $* |awk '{print substr($0, index($0,$2))}')
@@ -136,7 +136,7 @@ _upgrade_module(){
 
 _list_module(){
     [[ -s $MODULELIST ]]&&{ 
-        cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" \t \t "$2  }'; 
+        cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" "$2  }'|column -t; 
     }||{ echo "File $MODULELIST not found ! You may run $0 update before"; }
 }
 
