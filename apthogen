@@ -23,7 +23,7 @@ fi
 
 CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUNDLE="$CDIR/bundle"
-LOGS="$CDIR/.apthogne-$(date +%Y%m%d).log"
+LOGS="$CDIR/.apthogen-$(date +%Y%m%d).log"
 AVAILABLE="$CDIR/bundle-availlable"
 MODULELIST="$CDIR/.apthogen.list"
 
