@@ -61,6 +61,6 @@ Enter your choice and press [Enter]:   " c
         h|H)    _import minimal; _import highly ;;
         r|R)    _import highly; _import recomended ;;
         w|W)    _import recomended; _import whynot ;;
-        *)      _import minimal ;;
+        *)      _import required; _import minimal ;;
     esac
 }||{ echo "Command git not found ! Try : sudo apt install git";exit 0; }
