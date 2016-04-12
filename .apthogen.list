@@ -46,6 +46,7 @@ vimshell.vim@https://github.com/Shougo/vimshell.vim
 vim-signature@https://github.com/kshenoy/vim-signature
 vim-signify@https://github.com/mhinz/vim-signify
 vim-surround@https://github.com/tpope/vim-surround
+vim-template@https://github.com/aperezdc/vim-template
 vim-togglemouse@https://github.com/nvie/vim-togglemouse
 vim-varnish@https://github.com/empanda/vim-varnish
 vim-virtualenv@https://github.com/jmcantrell/vim-virtualenv
