@@ -28,6 +28,7 @@ TeTrIs@https://github.com/vim-scripts/TeTrIs.vim
 vdebug@https://github.com/joonty/vdebug
 vim-airline@https://github.com/bling/vim-airline
 vim-apthogen@https://github.com/vhalholl/vim-apthogen
+vim-bufferline@https://github.com/bling/vim-bufferline
 vim-colorschemes@https://github.com/flazz/vim-colorschemes
 vim-colors-solarized@https://github.com/altercation/vim-colors-solarized
 vim-eunuch@https://github.com/tpope/vim-eunuch
