@@ -48,7 +48,7 @@ ln -s ~/.vimnew ~/.vim
 ln -s ~/.vimnew/.vimrc ~/.vimrc
 ```
 ## Manage plugins
-You can manage plugins easily w/ module script :
+You can manage plugins easily w/ apthogen script :
 ```
 ./apthogen 
 Usage : ./aptogen {install|remove|enable|disable|update|upgrade|list|search|show}
@@ -59,7 +59,7 @@ Add new plugin in list of availlable plugins and download it into bundle-availla
 ./aptogen add <url_of_git_repository>
 ```
 ### Install
-Install plugin from  plugins list into bundle-availlable
+Install plugin from plugins list into bundle-availlable
 ```sh
 ./aptogen install <module_name>
 ```
