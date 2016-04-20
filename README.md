@@ -7,8 +7,8 @@ Easily manage your vim's plugins
 ## Installation :
 Backup your initial vim configuration :
 ```sh
-mv ~/.vim $_-$(date +%Y%m%d)
-mv ~/.vimrc $_-$(date +%Y%m%d)
+mv ~/.vim .vim-$(date +%Y%m%d)
+mv ~/.vimrc .vimrc-$(date +%Y%m%d)
 ```
 Create new directory and execute netinstall script via curl :
 ```sh
