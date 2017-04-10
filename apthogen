@@ -110,7 +110,9 @@ _install_module(){
         cd $AVAILABLE
         git clone $1 &>>$LOGS && _update_module_list $1
         cd ..
-    } || echo -e "Usage : $0 add [https|git://url_of_git_repository]"
+    } || {
+        echo -e "Usage : $0 add [https|git://url_of_git_repository]"
+    }
 }
 
 _upgrade_module(){
@@ -133,7 +135,9 @@ _upgrade_module(){
 _list_module(){
     [[ -s $MODULELIST ]]&&{ 
         cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" "$2  }'|column -t; 
-    }||{ echo "File $MODULELIST not found ! You may run $0 update before"; }
+    }||{ 
+        echo "File $MODULELIST not found ! You may run $0 update before"; 
+    }
 }
 
 _search_module(){
