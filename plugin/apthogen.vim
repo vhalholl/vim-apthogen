@@ -52,11 +52,10 @@ else
     set swapfile
 endif
 
-
 "" Enable colorschemes in .vim/colors
-if &t_Co >= 256 || has("gui_running")
-    colorscheme default
-endif
+"if &t_Co >= 256 || has("gui_running")
+"    colorscheme default
+"endif
 
 "" Enable Syntax Coloration
 if &t_Co > 2 || has("gui_running")
@@ -94,18 +93,18 @@ if has("unix") || has("win32unix")
 endif
 
 highlight LineNr term=bold ctermfg=darkgray guifg=darkgray
-"set cursorline
-"set visualbell           
-"set errorbells            
-"set showcmd                    " Show (partial) command in status line.
 
 set showmatch                   " Show matching brackets.
 set matchtime=2                 " Tenths of a second to show the matching patern, w/ 'showmatch'
-"set title                      " Change the terminal's title
 
 "" Terminal
+"set title                      " Change the terminal's title
 set mouse=a                     " mouse=nic Enable mouse usage (all modes)
 set ttyfast                     " Fast Term Connection 'Smoothy Redrawing'
 set lazyredraw                  " Don't redraw screen when executing macro,registers...
 set laststatus=2                " 0:never,1:only if there are at least two windows,2:always 
+"set showcmd                    " Show (partial) command in status line.
 "set writeany                   " no need '!' for override anymore
+"set cursorline
+"set visualbell           
+"set errorbells            
