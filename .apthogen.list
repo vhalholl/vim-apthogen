@@ -53,3 +53,4 @@ vim-varnish@https://github.com/empanda/vim-varnish
 vim-virtualenv@https://github.com/jmcantrell/vim-virtualenv
 vim-rooter@https://github.com/airblade/vim-rooter
 YouCompleteMe@https://github.com/Valloric/YouCompleteMe
+vim-airline-themes@https://github.com/vim-airline/vim-airline-themes
