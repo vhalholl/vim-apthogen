@@ -27,6 +27,7 @@ tern_for_vim@https://github.com/ternjs/tern_for_vim
 TeTrIs@https://github.com/vim-scripts/TeTrIs.vim
 vdebug@https://github.com/joonty/vdebug
 vim-airline@https://github.com/bling/vim-airline
+vim-airline-themes@https://github.com/vim-airline/vim-airline-themes
 vim-apthogen@https://github.com/vhalholl/vim-apthogen
 vim-bufferline@https://github.com/bling/vim-bufferline
 vim-colorschemes@https://github.com/flazz/vim-colorschemes
@@ -40,6 +41,7 @@ vim-perl@https://github.com/vim-perl/vim-perl
 vimproc.vim@https://github.com/Shougo/vimproc.vim
 vim-project@https://github.com/shemerey/vim-project
 vim-rails@https://github.com/tpope/vim-rails
+vim-rooter@https://github.com/airblade/vim-rooter
 vim-ruby@https://github.com/vim-ruby/vim-ruby
 vim-sensible@https://github.com/tpope/vim-sensible
 vimshell-ssh@https://github.com/ujihisa/vimshell-ssh
@@ -51,5 +53,4 @@ vim-template@https://github.com/aperezdc/vim-template
 vim-togglemouse@https://github.com/nvie/vim-togglemouse
 vim-varnish@https://github.com/empanda/vim-varnish
 vim-virtualenv@https://github.com/jmcantrell/vim-virtualenv
-vim-rooter@https://github.com/airblade/vim-rooter
 YouCompleteMe@https://github.com/Valloric/YouCompleteMe
