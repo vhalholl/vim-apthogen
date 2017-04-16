@@ -1,39 +1,43 @@
 #!/bin/bash
-: << 'module.sh'
-    Version: 2016.1
-    Authors: sysadmin@vhalholl.info
-    Description: manage VIMproved  modules under pathogen <https://github.com/tpope/vim-pathogen>
-    Dependencies: vim bash git awk
-module.sh
-#TODO:
-# apthogen::import  :import from file
+#
+#    Version:        2017.04
+#    Authors:        sysadmin@vhalholl.info
+#    Description:    manage VIMproved  modules under pathogen <https://github.com/tpope/vim-pathogen>
+#    Dependencies:   vim git
 
-if [[ $# > 2 || $# = 2 ]];then
-    ARGS=$(echo $* |awk '{print substr($0, index($0,$2))}')
+if [[ "$#" -gt "2" || "$#" == "2" ]];then
+    vArgs=$(echo "$*" |awk '{print substr($0, index($0,$2))}')
 else
-    ARGS=''
+    vArgs=''
 fi
 
-CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BUNDLE="$CDIR/bundle"
-LOGS="$CDIR/.apthogen-$(date +%Y%m%d).log"
-AVAILABLE="$CDIR/bundle-availlable"
-MODULELIST="$CDIR/.apthogen.list"
+vCurentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+vLogFile="$vCurentDir/adn/.apthogen-$(date +%Y%m%d).log"
+vBundleDb="$vCurentDir/adn/.apthogen.list"
+vBundlesDir="$vCurentDir/bundle"
+vBundlesAvailable="$vCurentDir/bundle-available"
 
-_usage(){
-    echo -e "Usage : $0 {install|remove|enable|disable|update|upgrade|list|search|show|help}"
+fUsage(){
+    echo "Usage : $0 {install|remove|enable|disable|update|upgrade|list|search|show|help}"
 }
 
-_enable_module(){
-    [[ ! -z $1 ]]&&{
-        [[ ! -d $AVAILABLE/$1 ]]&& { echo "Module $1 is unavailable"; }||{
-            [[ ! -L $BUNDLE/$1 ]]&&{
-                cd $BUNDLE
-                ln -s $AVAILABLE/$1 
-                cd ..
-                echo "Module $1 enabled"
+fWriteLog(){
+    [[ -z "$*" ]]||{
+        echo "$(date +%Y%m%d%H%M%S) Apthogen::$*" > "$vLogFile"
+        echo "Apthogen::$*"
+    }
+}
+
+fModuleEnable(){
+    [[ ! -z "$1" ]]&&{
+        [[ ! -d "$vBundlesAvailable/$1" ]]&&{ echo "Module $1 is unavailable"; }||{
+            [[ ! -L "$vBundlesDir/$1" ]]&&{
+                cd "$vBundlesDir"
+                ln -s "$vBundlesAvailable/$1" 
+                cd "$vCurentDir"
+                fWriteLog "Module $1 enabled"
             }||{ 
-                echo "Module $1 already exist"
+                fWriteLog "Module $1 already exist"
             }
         }
     }||{
@@ -41,106 +45,106 @@ _enable_module(){
     }
 }
 
-_disable_module(){
-    [[ ! -z $1 ]]&&{
-        [[ -L $BUNDLE/$1 ]]&&{
-            rm $BUNDLE/$1 && echo "Module $1 disabled"
+fModuleDisable(){
+    [[ ! -z "$1" ]]&&{
+        [[ -L "$vBundlesDir/$1" ]]&&{
+            rm "$vBundlesDir/$1" && echo "Module $1 disabled"
         }||{ 
-            echo "Module $1 not found !"
+            fWriteLog "Module $1 not found !"
         }
     }||{
         echo -e "Usage : $0 disable [module_name]";
     }
 }
 
-_remove_module(){
-    [[ ! -z $1 ]]&&{
-        [[ -d $AVAILABLE/$1 ]]&&{
-            _disable_module $1 
-            rm -rf $AVAILABLE/$1 && echo "Module $1 removed"
+fModuleRemove(){
+    [[ ! -z "$1" ]]&&{
+        [[ -d "$vBundlesAvailable/$1" ]]&&{
+            fModuleDisable "$1" 
+            rm -rf "${vBundlesAvailable:?}/$1" && echo "Module $1 removed"
         }||{ 
-            echo "Module $1 not found !"
+            fWriteLog "Module $1 not found !"
         }
     }||{
         echo -e "Usage : $0 remove [modulename]";
     }
 }
-_update_module_list(){
-    [[ ! -z $1 ]]&&{ 
-        [[ -d $AVAILABLE/$1/.git ]]&&{ 
-            url=$(cat ${AVAILABLE}/${1}/.git/config |grep 'url' |awk '{print $3}');
-            echo "Indexing module $1 @ $url";
-            echo "$i@$j" >> $MODULELIST;
+
+fModuleListUpdate(){
+    [[ ! -z "$1" ]]&&{ 
+        [[ -d "$vBundlesAvailable/$1/.git" ]]&&{ 
+            url=$(grep 'url' "${vBundlesAvailable}/${1}/.git/config" |awk '{print $3}');
+            fwriteLog "Indexing module $1 @ $url";
+            echo "$i@$j" >> "$vBundleDb";
         }
     }||{
-        cd $AVAILABLE
+        cd "$vBundlesAvailable" || exit 255
         #if not exist modulelist or empty and module dir is not empty then create modulelist
-        [[ ! -s $MODULELIST && $(ls -l |grep ^d |wc -l) != 0 ]]&& { #create modulelist
-            echo "There is no $MODULELIST file suitable, indexing from $AVAILABLE directory"
+        [[ ! -s "$vBundleDb" && $(ls -l |grep -c ^d) != 0 ]]&& { #create modulelist
+            fWriteLog "Error: There is no $vBundleDb file suitable, indexing from $vBundlesAvailable directory"
             for i in $(ls -l |grep ^d |awk '{print $9}');do 
-                j=$(cat ${i}/.git/config |grep 'url' |awk '{print $3}');
-                echo "Indexing module $i @ $j";
-                echo "$i@$j" >> $MODULELIST;
+                j=$(grep 'url' "${i}/.git/config" |awk '{print $3}');
+                fWriteLog "Indexing: module $i @ $j";
+                echo "$i@$j" >> "$vBundleDb";
             done
         }||{ #else compare and add to modulelist
-            MODULES=$(cat $MODULELIST | wc -l); 
-            INSTALLEDMODULES=$(ls -l |grep ^d |wc -l);
-            #echo "There is $MODULES modules found in list !"
-            #echo "There is $INSTALLEDMODULES modules found in $AVAILABLE directory !"
-            [[ $MODULES != $INSTALLEDMODULES ]]&& {
+            [[ "$(wc -l "$vBundleDb")" != "$(ls -l |grep -c ^d)" ]]&& {
                 for i in $(ls -l |grep ^d |awk '{print $9}');do 
-                    j=$(cat ${i}/.git/config |grep 'url' |awk '{print $3}');
-                    [[ $(grep "$i@$j" $MODULELIST) ]]|| {
-                        echo "Indexing new module $i @$j"; echo "$i@$j" >> $MODULELIST;
-                        temp=$(cat $MODULELIST |sort); rm $MODULELIST;
-                        for i in $(echo $temp | tr ' ' '\n');do 
-                            echo $i >> $MODULELIST;
+                    j=$(grep "${i}/.git/config" |awk '{print $3}');
+                    [[ $(grep "$i@$j" "$vBundleDb") ]]|| {
+                        fWriteLog "Indexing new module $i @$j"; 
+                        echo "$i@$j" >> "$vBundleDb";
+                        #TODO write temp file before process
+                        temp=$(sort "$vBundleDb"); rm "$vBundleDb";
+                        for h in $(echo "$temp" | tr ' ' '\n');do 
+                            echo "$h" >> "$vBundleDb";
                         done
                     }
                 done
             }
         }
-        cd $CDIR
+        cd "$vCurentDir" || return 255
     }
 }
 
-_install_module(){
-    [[ ! -z $1 ]]&& {
-    echo -e "Apthogen::Phagocyte::$1"
-        cd $AVAILABLE
-        git clone $1 &>>$LOGS && _update_module_list $1
-        cd ..
+fModuleInstall(){
+    [[ ! -z "$1" ]]&& {
+        fWriteLog "Phagocyte::$1"
+        cd "$vBundlesAvailable" && git clone "$1" &>>"$vLogFile" && fModuleListUpdate "$1"
     } || echo -e "Usage : $0 add [https|git://url_of_git_repository]"
 }
 
-_upgrade_module(){
-    cd $AVAILABLE
-    [[ -z $1 ]]&&{
-        for dir in $(ls -d */);do 
-            [[ -d $dir/.git ]]&&{ echo "Apthogen::Evolve::$dir"; cd $dir;git pull &>>$LOGS;cd ..; };
+fModuleUpgrade(){
+    cd "$vBundlesAvailable" || return  255
+    [[ -z "$1" ]]&&{
+        for d in $(ls -d */);do 
+            [[ -d "$d/.git" ]]&&{ 
+                fWriteLog "Evolve::$d"; 
+                cd "$d" && git pull &>>"$vLogFile" && cd "$vCurentDir"
+            }
         done 
     }||{
-        [[ -d $1/.git ]]&&{
-            echo "Apthogen::Evolve::$1"
-            cd $1;git pull &>>$LOGS;cd ..; 
+        [[ -d "$1/.git" ]]&&{
+            fWriteLog "Evolve::$1"
+            cd "$1" && git pull &>> "$vLogFile";
         }||{ 
-            echo "There is no place like $1"; 
+            fWriteLog "Error: There is no place like $1"; 
         }
     }
-    cd $CDIR
+    cd "$vCurentDir" || return 255
 }
 
-_list_module(){
-    [[ -s $MODULELIST ]]&&{ 
-        cat $MODULELIST |awk 'BEGIN { FS="@" };{ print $1" "$2  }'|column -t; 
-    }||{ echo "File $MODULELIST not found ! You may run $0 update before"; }
+fModuleList(){
+    [[ -s "$vBundleDb" ]]&&{ 
+        awk 'BEGIN { FS="@" };{ print $1" "$2  }' "$vBundleDb" |column -t; 
+    }||{ fWriteLog "Error: File $vBundleDb not found ! You may run $0 update before"; }
 }
 
-_search_module(){
-    [[ ! -z $1 ]]&&{
-        [[ -s $MODULELIST ]]&& { 
-        for i in $(_list_module |awk '{print $1}' |grep "$1");do
-            _list_module |grep $i;
+fModuleSearch(){
+    [[ ! -z "$1" ]]&&{
+        [[ -s "$vBundleDb" ]]&& { 
+        for i in $(fModuleList |awk '{print $1}' |grep "$1");do
+            fModuleList |grep "$i";
         done
         }
     }||{ 
@@ -148,12 +152,13 @@ _search_module(){
     } 
 }
 
-_show_module(){
-    [[ ! -z $1 ]]&&{
-        for i in $(_search_module $1 |awk '{print $2}' |grep "$1");do
-            baseUrl="$(echo $i |sed 's/github/raw.githubusercontent/')/master/README";
-            for i in {md,markdown};do 
-                [[ $(curl -sL $baseUrl.$i) != "404: Not Found" ]]&& curl -sL $baseUrl.$i |less;
+fModuleShow(){
+    [[ ! -z "$1" ]]&&{
+        for i in $(fModuleSearch "$1" |awk '{print $2}' |grep "$1");do
+            #baseUrl="$(echo "$i" |sed 's/github/raw.githubusercontent/')/master/README";
+            baseUrl="${i//github/raw.githubusercontent/}/master/README";
+            for j in {md,markdown};do 
+                [[ $(curl -sL "$baseUrl"."$j") != "404: Not Found" ]]&& curl -sL "$baseUrl"."$j" |less;
             done
         done
     }||{
@@ -161,16 +166,16 @@ _show_module(){
     }  
 }
 
-_import_module(){
-    [[ ! -z $1 ]]&&{
-        case $1 in
+fModuleImport(){
+    [[ ! -z "$1" ]]&&{
+        case "$1" in
             *)
-                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done;
-                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done;
+                for i in $(fModuleSearch "$1" |grep -v 'vim-config' |awk '{print $2}' );do fModuleInstall "$i";done;
+                for i in $(fModuleSearch "$1" |grep -v 'vim-config' |awk '{print $1}' );do fModuleEnable "$i";done;
             ;;
             All|all)
-                for i in $(_list_module |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done;
-                for i in $(_list_module |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done;
+                for i in $(fModuleList |grep -v 'vim-config' |awk '{print $2}' );do fModuleInstall "$i";done;
+                for i in $(fModuleList |grep -v 'vim-config' |awk '{print $1}' );do fModuleEnable "$i";done;
             ;;
         esac
     }||{
@@ -180,45 +185,45 @@ _import_module(){
 
 case $1 in
     add)
-        _install_module $ARGS
+        fModuleInstall $vArgs
     ;;
     install)
-        _import_module $ARGS
+        fModuleImport $vArgs
     ;;
     remove)
-        _remove_module $ARGS
+        fModuleRemove $vArgs
     ;;
     enable)
-        _enable_module $ARGS
+        fModuleEnable $vArgs
     ;;
     disable)
-        _disable_module $ARGS
+        fModuleDisable $vArgs
     ;;
     update)
-        _upgrade_module vim-apthogen
+        fModuleUpgrade vim-apthogen
     ;;
     updatelist)
-        _update_module_list
+        fModuleListUpdate
     ;;
     upgrade)
-        _upgrade_module $ARGS
+        fModuleUpgrade $vArgs
     ;;
     list)
-        _list_module $ARGS
+        fModuleList $vArgs
     ;;
     search)
-        _search_module $ARGS
+        fModuleSearch $vArgs
     ;;
     show)
-        _show_module $ARGS
+        fModuleShow $vArgs
     ;;
     help)
-        _show_module
+        fModuleShow
     ;;
     import)
-        _import_module $ARGS
+        fModuleImport $vArgs
     ;;
     *) 
-        _usage
+        fUsage
     ;;
 esac
