@@ -27,7 +27,7 @@ DEP=$(which git);[ ! -z $DEP ]&& {
         ln -s $CDIR/bundle-availlable/vim-apthogen/.apthogen.list ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/.vimrc ./
         
-        ln -s $CDIR/bundle-availlable/vim-apthogen/templates ./
+        ln -s $CDIR/bundle-availlable/vim-apthogen/plugin ./config
 
         ln -s $CDIR/bundle-availlable/vim-apthogen/.required.list ./
         ln -s $CDIR/bundle-availlable/vim-apthogen/.minimal.list ./
