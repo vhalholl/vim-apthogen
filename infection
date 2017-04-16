@@ -1,66 +1,61 @@
 #!/bin/bash
-: << 'install.sh'
-    Version: 2016.04
-    Authors: sysadmin@vhalholl.info
-    Description: install apthogen from github
-    Dependencies: git
-install.sh
+#
+#    Version:        2017.04
+#    Authors:        sysadmin@vhalholl.info
+#    Description:    install vim-apthogen from github
+#    Dependencies:   git
 
-CDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-LOGS="$CDIR/.netinstall-$(date +%Y%m%d).log"
+vCurentDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+vLogFile="$vCurentDir/.infection-$(date +%Y%m%d).log"
 
-DEP=$(which git);[ ! -z $DEP ]&& {
-
-    [[ ! -d $CDIR/bundle ]]&&  mkdir $CDIR/bundle
-    [[ ! -d $CDIR/bundle-availlable ]]&&  mkdir $CDIR/bundle-availlable
-    [[ ! -d $CDIR/bundle-availlable/vim-apthogen ]]&& {
+if [[ ! -z "$(which git)" ]];
+then
+    # Create Directories
+    [[ ! -d "$vCurentDir/bundle" ]]&&  mkdir "$vCurentDir/bundle"
+    [[ ! -d "$vCurentDir/bundle-available" ]]&&  mkdir "$vCurentDir/bundle-available"
+    [[ ! -d "$vCurentDir/bundle-available/vim-apthogen" ]]&& {
         echo "Apthogen::Incubate"
-        cd $CDIR/bundle-availlable
-        git clone https://github.com/vhalholl/vim-apthogen &>$LOGS
-        cd ..
+        git clone https://github.com/vhalholl/vim-apthogen "$vCurentDir/bundle-available/vim-apthogen" &>"$vLogFile"
     }
-    [[ ! -L $CDIR/bundle/vim-apthogen ]]&&{
+    # Make Initials Symlinks, apthogen will handles them by himself later
+    [[ ! -L "$vCurentDir/bundle/vim-apthogen" ]]&&{
         echo "Apthogen::Infection"
-        ln -s $CDIR/bundle-availlable/vim-apthogen $CDIR/bundle/
-        ln -s $CDIR/bundle-availlable/vim-apthogen/apthogen ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/netinstall ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.apthogen.list ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.vimrc ./
-        
-        ln -s $CDIR/bundle-availlable/vim-apthogen/templates ./
-
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.required.list ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.minimal.list ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.highly.list ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.recomended.list ./
-        ln -s $CDIR/bundle-availlable/vim-apthogen/.whynot.list ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen" "$vCurentDir/bundle/"
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/apthogen" ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/infection" ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/adn" ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/mutations" ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/.vimrc" ./
     }
 
-    n=$(cat $CDIR/.apthogen.list |wc -l)
-
-    _import(){
-        echo "Propagate::$1"
+    fModuleListImport(){
+        echo "Apthogen::Propagate::$1"
         while read -r line;do
-            ./apthogen import $line
-        done < .$1.list
+            eval "$vCurentDir/apthogen import $line"
+        done < "$vCurentDir/mutations/.$1.list"
     }
 
-    read -p "Propagate :
-[S]lim               (Only Required Modules)     
-[M]inimal            (Default)
-[H]ighly Recomended  
-[R]ecomended          
-[W]hynot             
-[A]ll                (Not Recomended For Testing Purpose)
-[C]ancel
-Enter your choice and press [Enter]:   " c
+    #TODO: Best package integration, More Flavor like 
+
+    read -r -p "Propagate :
+    [S]lim               (Only Required Modules)     
+    [M]inimal            (Default)
+    [H]ighly Recomended  
+    [R]ecomended          
+    [W]hynot             
+    [A]ll                (Not Recomended For Testing Purpose)
+    [C]ancel
+    Enter your choice and press [Enter]:   " c
     case "$c" in 
-        a|A)    echo "Propagate::All ($n)"; ./apthogen import ;;
+        a|A)    echo "Propagate::All ($(wc -l "$vCurentDir/adn/.apthogen.list"))";./apthogen import ;;
         c|C)    exit 0 ;;
-        s|S)    _import required ;;
-        h|H)    _import minimal; _import highly ;;
-        r|R)    _import highly; _import recomended ;;
-        w|W)    _import recomended; _import whynot ;;
-        *)      _import required; _import minimal ;;
+        s|S)    fModuleListImport required ;;
+        h|H)    fModuleListImport minimal; fModuleListImport highly ;;
+        r|R)    fModuleListImport highly; fModuleListImport recomended ;;
+        w|W)    fModuleListImport recomended; fModuleListImport whynot ;;
+        *)      fModuleListImport required; fModuleListImport minimal ;;
     esac
-}||{ echo "Command git not found ! Try : sudo apt install git";exit 0; }
+else 
+    echo "Command git not found ! Try : sudo apt install git";
+    exit 0; 
+fi
