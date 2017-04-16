@@ -2,7 +2,6 @@
 " Configuration for Project plugin
 "
 
-
 " Use Project
 runtime! ~/.vim/plugin/Project.vim
 

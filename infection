@@ -26,12 +26,13 @@ then
         ln -s "$vCurentDir/bundle-available/vim-apthogen/adn" ./
         ln -s "$vCurentDir/bundle-available/vim-apthogen/mutations" ./
         ln -s "$vCurentDir/bundle-available/vim-apthogen/.vimrc" ./
+        ln -s "$vCurentDir/bundle-available/vim-apthogen/plugin" ./config
     }
 
     fModuleListImport(){
         echo "Apthogen::Propagate::$1"
         while read -r line;do
-            eval "$vCurentDir/apthogen import $line"
+            "$vCurentDir/apthogen" import "$line"
         done < "$vCurentDir/mutations/.$1.list"
     }
 
@@ -47,7 +48,7 @@ then
     [C]ancel
     Enter your choice and press [Enter]:   " c
     case "$c" in 
-        a|A)    echo "Propagate::All ($(wc -l "$vCurentDir/adn/.apthogen.list"))";./apthogen import ;;
+        a|A)    echo "Propagate::All ($(wc -l < "$vCurentDir/adn/.apthogen.list") Modules)";./apthogen import all;;
         c|C)    exit 0 ;;
         s|S)    fModuleListImport required ;;
         h|H)    fModuleListImport minimal; fModuleListImport highly ;;

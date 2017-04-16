@@ -88,10 +88,10 @@ fModuleListUpdate(){
                 echo "$i@$j" >> "$vBundleDb";
             done
         }||{ #else compare and add to modulelist
-            [[ "$(wc -l "$vBundleDb")" != "$(ls -l |grep -c ^d)" ]]&& {
+            [[ "$(wc -l < "$vBundleDb")" != "$(ls -l |grep -c ^d)" ]]&& {
                 for i in $(ls -l |grep ^d |awk '{print $9}');do 
                     j=$(grep "${i}/.git/config" |awk '{print $3}');
-                    [[ $(grep "$i@$j" "$vBundleDb") ]]|| {
+                    [[ $(grep -q "$i@$j" "$vBundleDb") ]]|| {
                         fWriteLog "Indexing new module $i @$j"; 
                         echo "$i@$j" >> "$vBundleDb";
                         #TODO write temp file before process
@@ -110,7 +110,9 @@ fModuleListUpdate(){
 fModuleInstall(){
     [[ ! -z "$1" ]]&& {
         fWriteLog "Phagocyte::$1"
-        cd "$vBundlesAvailable" && git clone "$1" &>>"$vLogFile" && fModuleListUpdate "$1"
+        cd "$vBundlesAvailable"
+        git clone "$1" &>>"$vLogFile"
+        fModuleListUpdate "$1"
     } || echo -e "Usage : $0 add [https|git://url_of_git_repository]"
 }
 
@@ -170,12 +172,12 @@ fModuleImport(){
     [[ ! -z "$1" ]]&&{
         case "$1" in
             *)
-                for i in $(fModuleSearch "$1" |grep -v 'vim-config' |awk '{print $2}' );do fModuleInstall "$i";done;
-                for i in $(fModuleSearch "$1" |grep -v 'vim-config' |awk '{print $1}' );do fModuleEnable "$i";done;
+                for i in $(fModuleSearch "$1" |grep -v 'vim-apthogen' |awk '{print $2}' );do fModuleInstall "$i";done;
+                for i in $(fModuleSearch "$1" |grep -v 'vim-apthogen' |awk '{print $1}' );do fModuleEnable "$i";done;
             ;;
             All|all)
-                for i in $(fModuleList |grep -v 'vim-config' |awk '{print $2}' );do fModuleInstall "$i";done;
-                for i in $(fModuleList |grep -v 'vim-config' |awk '{print $1}' );do fModuleEnable "$i";done;
+                for i in $(fModuleList |grep -v 'vim-apthogen' |awk '{print $2}' );do fModuleInstall "$i";done;
+                for i in $(fModuleList |grep -v 'vim-apthogen' |awk '{print $1}' );do fModuleEnable "$i";done;
             ;;
         esac
     }||{

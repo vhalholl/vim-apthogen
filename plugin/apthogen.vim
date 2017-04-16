@@ -9,20 +9,10 @@ if &t_Co > 2 || has("gui_running")
     endif
 endif
 
-"" Enable colorschemes in .vim/colors
-if &t_Co >= 256 || has("gui_running")
-    " if solarised
-    " let g:solarized_termtrans=1
-    " let g:solarized_termcolors=256
-    " colorscheme solarised
-    " else
-    colorscheme default
-endif
-
 "" Hide buffers when they are abandoned instead of closing them
 set hidden
 
-"" Make Apthogen Symlinks
+"" Maintain Apthogen Symlinks
 for i in [ "adn","mutations","infection","apthogen",".vimrc" ] 
     if filereadable(expand($HOME."/.vim/".i))
 "        let j = expand("File ".$HOME."/.vim/".i)
@@ -74,8 +64,6 @@ else
     set dir=~/
     set swapfile
 endif
-
-
 
 "" Mouse4GUI
 if has("gui_running")
