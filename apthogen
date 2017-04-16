@@ -78,7 +78,7 @@ fModuleListUpdate(){
             echo "$i@$j" >> "$vBundleDb";
         }
     }||{
-        cd "$vBundlesAvailable" || exit 255
+        cd "$vBundlesAvailable" || return 127
         #if not exist modulelist or empty and module dir is not empty then create modulelist
         [[ ! -s "$vBundleDb" && $(ls -l |grep -c ^d) != 0 ]]&& { #create modulelist
             fWriteLog "Error: There is no $vBundleDb file suitable, indexing from $vBundlesAvailable directory"
@@ -117,7 +117,7 @@ fModuleInstall(){
 }
 
 fModuleUpgrade(){
-    cd "$vBundlesAvailable" || return  255
+    cd "$vBundlesAvailable" || return  127
     [[ -z "$1" ]]&&{
         for d in $(ls -d */);do 
             [[ -d "$d/.git" ]]&&{ 
@@ -185,47 +185,25 @@ fModuleImport(){
     }
 }
 
-case $1 in
-    add)
-        fModuleInstall $vArgs
-    ;;
-    install)
-        fModuleImport $vArgs
-    ;;
-    remove)
-        fModuleRemove $vArgs
-    ;;
-    enable)
-        fModuleEnable $vArgs
-    ;;
-    disable)
-        fModuleDisable $vArgs
-    ;;
-    update)
-        fModuleUpgrade vim-apthogen
-    ;;
-    updatelist)
-        fModuleListUpdate
-    ;;
-    upgrade)
-        fModuleUpgrade $vArgs
-    ;;
-    list)
-        fModuleList $vArgs
-    ;;
-    search)
-        fModuleSearch $vArgs
-    ;;
-    show)
-        fModuleShow $vArgs
-    ;;
-    help)
-        fModuleShow
-    ;;
-    import)
-        fModuleImport $vArgs
-    ;;
-    *) 
-        fUsage
-    ;;
+case "$1" in
+    add)        fModuleInstall $vArgs;              ;;
+    install)    fModuleImport $vArgs;               ;;
+    remove)     fModuleRemove $vArgs;               ;;
+    enable)     fModuleEnable $vArgs;               ;;
+    disable)    fModuleDisable $vArgs;              ;;
+    update)     fModuleUpgrade vim-apthogen;        ;;
+    updatelist) fModuleListUpdate;                  ;;
+    upgrade)    fModuleUpgrade $vArgs;              ;;
+    list)       fModuleList $vArgs;                 ;;
+    search)     fModuleSearch $vArgs;               ;;
+    show)       fModuleShow $vArgs;                 ;;
+    help)       fModuleShow;                        ;;
+    import)     fModuleImport $vArgs;               ;;
+    *)          fUsage;                             ;;
+esac
+case "$?" in
+    0)      exit 0;                                             ;;
+    127)    echo "Apthogen::Error: cd $vBundlesAvailable";      ;; 
+    255)    echo "Apthogen::Error: cd $vCurentDir";             ;; 
+    *)      exit "$?";                                          ;;
 esac
