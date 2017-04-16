@@ -5,7 +5,7 @@
 set hidden
 
 "" Make Symlink
-for i in [ ".modulelist","apthogen","templates",".vimrc","" ] 
+for i in [ "netinstall","apthogen",".vimrc","" ] 
     if filereadable(expand($HOME."/.vim/".i))
 "        let j = expand("File ".$HOME."/.vim/".i)
     elseif filewritable(expand($HOME."/.vim".i)) == 2
