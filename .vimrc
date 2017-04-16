@@ -7,5 +7,3 @@ call pathogen#helptags()
 syntax on
 filetype on
 filetype plugin indent on
-
-"set t_Co=256
