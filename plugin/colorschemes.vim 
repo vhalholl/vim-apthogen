@@ -1,9 +1,0 @@
-"colorschemes.vim
-
-"" Enable colorschemes via .vim/colors
-if &t_Co >= 256 || has("gui_running")
-    "let g:solarized_termtrans=1
-    "let g:solarized_termcolors=256
-    "colorscheme solarised
-    "colorscheme default
-endif
