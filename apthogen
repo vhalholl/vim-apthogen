@@ -169,12 +169,12 @@ _import_module(){
     [[ ! -z $1 ]]&&{
         case $1 in
             *)
-                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done;
-                for i in $(_search_module $1 |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done;
+                for i in $(_search_module $1 |grep -v 'vim-apthogen' |awk '{print $2}' );do _install_module $i;done;
+                for i in $(_search_module $1 |grep -v 'vim-apthogen' |awk '{print $1}' );do _enable_module $i;done;
             ;;
             All|all)
-                for i in $(_list_module |grep -v 'vim-config' |awk '{print $2}' );do _install_module $i;done;
-                for i in $(_list_module |grep -v 'vim-config' |awk '{print $1}' );do _enable_module $i;done;
+                for i in $(_list_module |grep -v 'vim-apthogen' |awk '{print $2}' );do _install_module $i;done;
+                for i in $(_list_module |grep -v 'vim-apthogen' |awk '{print $1}' );do _enable_module $i;done;
             ;;
         esac
     }||{
