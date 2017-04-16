@@ -1,6 +1,7 @@
 vim-sensible
 vim-project
 vim-togglemouse
+vim-templates
 vimproc.vim
 vimshell.vim
 delimitMate

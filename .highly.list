@@ -7,5 +7,8 @@ syntastic
 git-vim
 puppet-eyes
 tagbar
+vim-color-solarized
+vim-airline
+vim-airline-themes
 taglist.vim
 taskList.vim
