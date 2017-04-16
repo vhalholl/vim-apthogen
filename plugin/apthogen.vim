@@ -1,11 +1,29 @@
 " apthogen.vim
 "
+filetype plugin indent on
+
+"" Enable Syntax Coloration
+if &t_Co > 2 || has("gui_running")
+    if has("syntax")
+        syntax on
+    endif
+endif
+
+"" Enable colorschemes in .vim/colors
+if &t_Co >= 256 || has("gui_running")
+    " if solarised
+    " let g:solarized_termtrans=1
+    " let g:solarized_termcolors=256
+    " colorscheme solarised
+    " else
+    colorscheme default
+endif
 
 "" Hide buffers when they are abandoned instead of closing them
 set hidden
 
-"" Make Symlink
-for i in [ ".modulelist","apthogen","templates",".vimrc","" ] 
+"" Make Apthogen Symlinks
+for i in [ "adn","mutations","infection","apthogen",".vimrc" ] 
     if filereadable(expand($HOME."/.vim/".i))
 "        let j = expand("File ".$HOME."/.vim/".i)
     elseif filewritable(expand($HOME."/.vim".i)) == 2
@@ -18,6 +36,11 @@ for i in [ ".modulelist","apthogen","templates",".vimrc","" ]
     endif
 "    echom j
 endfor
+if has("unix") || has("win32unix")
+    call system(expand("ln -s ".$HOME."/.vim/bundle-availlable/vim-config/plugin".$HOME."/.vim/config"))
+"   let j = expand("Linked ".$HOME."/.vim/config")
+endif
+"    echom j
 
 "" Set backup dir & backup
 if filewritable(expand($HOME."/.vim/backup")) == 2
@@ -53,17 +76,6 @@ else
 endif
 
 
-"" Enable colorschemes in .vim/colors
-if &t_Co >= 256 || has("gui_running")
-    colorscheme default
-endif
-
-"" Enable Syntax Coloration
-if &t_Co > 2 || has("gui_running")
-    if has("syntax")
-        syntax on
-    endif
-endif
 
 "" Mouse4GUI
 if has("gui_running")
