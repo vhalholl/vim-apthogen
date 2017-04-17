@@ -26,7 +26,6 @@ TaskList.vim@https://github.com/vim-scripts/TaskList.vim
 tern_for_vim@https://github.com/ternjs/tern_for_vim
 TeTrIs@https://github.com/vim-scripts/TeTrIs.vim
 vdebug@https://github.com/joonty/vdebug
-vim-airline@https://github.com/bling/vim-airline
 vim-apthogen@https://github.com/vhalholl/vim-apthogen
 vim-bufferline@https://github.com/bling/vim-bufferline
 vim-colorschemes@https://github.com/flazz/vim-colorschemes
@@ -53,4 +52,6 @@ vim-varnish@https://github.com/empanda/vim-varnish
 vim-virtualenv@https://github.com/jmcantrell/vim-virtualenv
 vim-rooter@https://github.com/airblade/vim-rooter
 YouCompleteMe@https://github.com/Valloric/YouCompleteMe
+vim-airline@https://github.com/bling/vim-airline
+vim-json@https://github.com/elzr/vim-json
 vim-airline-themes@https://github.com/vim-airline/vim-airline-themes
